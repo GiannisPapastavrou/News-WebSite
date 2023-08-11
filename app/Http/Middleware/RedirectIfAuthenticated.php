@@ -24,13 +24,13 @@ class RedirectIfAuthenticated
             switch($guard){
                 case 'writer':
                     if (Auth::guard($guard)->check()){
-                        return redirect('/writer/welcome');
+                        return redirect()->route('writer.welcome');
                     }
                     break;
                 
                 default:
                     if (Auth::guard($guard)->check()){
-                        return redirect('/welcome');
+                        return redirect()->route('welcome');
                     }
                     break;
 

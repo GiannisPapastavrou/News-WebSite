@@ -11,8 +11,9 @@ class UserController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('guest:web');
+        $this->middleware('guest:web',['except' => ['logout','welcome']]);
     }
+
 
 
 
@@ -50,12 +51,29 @@ class UserController extends Controller
         if (Auth::attempt($credentials, $request->filled('remember'))) {
             $request->session()->regenerate();
     
-            return redirect()->intended('/welcome');
+            return redirect()->intended('/mainpage');
         }
     
         return back()->withErrors([
             'email' => 'The provided credentials do not match our records.',
         ]);
     
+    }
+
+
+    public function logout(Request $request){
+
+        Auth::guard('writer')->logout();
+
+        // $request->session()->invalidate();
+        // $request->session()->regenerateToken();
+        
+        return redirect()->route('mainpage');
+    }
+
+    
+    public function welcome()
+    {
+        return view('welcome_user');
     }
 }

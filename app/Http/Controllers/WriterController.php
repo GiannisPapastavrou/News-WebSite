@@ -11,7 +11,7 @@ class WriterController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth:writer');
+        $this->middleware('guest:writer',['except' => ['logout','welcome']]);
     }
 
 
@@ -19,12 +19,6 @@ class WriterController extends Controller
     public function showLoginForm()
     {
         return view('login_writer');
-    }
-
-
-    public function welcome()
-    {
-        return view('welcome_writer');
     }
 
     public function login(Request $request)
@@ -41,6 +35,21 @@ class WriterController extends Controller
             'email' => 'The provided credentials do not match our records.',
         ]);
     
+    }
+
+    public function logout(Request $request){
+
+        Auth::guard('writer')->logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        
+        return redirect()->route('mainpage');
+    }
+
+    public function welcome()
+    {
+        return view('welcome_writer');
     }
 
 

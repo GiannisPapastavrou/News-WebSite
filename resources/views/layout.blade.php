@@ -19,17 +19,38 @@
             <a class="navbar-brand" style="color: white;" href="#">{{ config('app.name', 'Laravel') }}</a>          
             <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
                 <ul class="navbar-nav ">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/create">Create an account</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/login">Login</a>
-                    </li>
+                    @if(!Auth::check())
+                        <li class="nav-item">
+                            <a class="nav-link" href="/create">Create an account</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/login">Login</a>
+                        </li>
+                    @else
+                   
+                        @if(Auth::guard('writer')->check())
+                        <li>
+                            <form method="post" action="{{ route('writerLogout') }}" >
+                            <button class="btn navbar-brand" type="submit">logout writer</button>
+                            <input type="hidden" name="_token" value="{{ csrf_token() }}" />
+                            </form>
+                            </li>
+                        @endif
+                        @if(Auth::guard('web')->check())
+                        <li>
+                            <form method="post" action="{{ route('userLogout') }}" >
+                                <button class="btn navbar-brand" type="submit">logout user</button>
+                                <input type="hidden" name="_token" value="{{ csrf_token() }}" />
+                            </form>
+                            </li>
+                        @endif
+                    
+                        @endif
                 </ul>
             </div>
         </div>
           
-        
+   
 </nav>
     @yield('content')
 </body>
